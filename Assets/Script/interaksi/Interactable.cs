@@ -19,7 +19,7 @@ public class Interactable : MonoBehaviour
     private void Update()
     {
         // Menekan tombol E saat berada di area sensor
-        if (isPlayerNearby && Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        if (isPlayerNearby && Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
         {
             if (DialogueManager.Instance != null && !DialogueManager.Instance.IsDialogueActive())
             {
