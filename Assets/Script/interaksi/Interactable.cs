@@ -3,13 +3,19 @@ using UnityEngine.InputSystem;
 
 public class Interactable : MonoBehaviour
 {
-    [SerializeField] private string dialogueMessage = "Halo Fathir! Ini adalah pesan eksplorasi.";
     [SerializeField] private GameObject interactPrompt;
+    
+    private IInteractable interactableComponent;
     private bool isPlayerNearby = false;
+
+    private void Awake()
+    {
+        // ngambil komponen yang mengimplementasikan IInteractable yang ada di GameObject ini (Polimorfisme)
+        interactableComponent = GetComponent<IInteractable>();
+    }
 
     private void Start()
     {
-        // Sembunyikan logo tombol E saat game dimulai
         if (interactPrompt != null)
         {
             interactPrompt.SetActive(false);
@@ -18,14 +24,16 @@ public class Interactable : MonoBehaviour
 
     private void Update()
     {
-        // Menekan tombol E saat berada di area sensor
+        bool isDialogueActive = DialogueManager.Instance != null && DialogueManager.Instance.IsDialogueActive;
+
+        // menekan tombol F pas dekat di area sensor
         if (isPlayerNearby && Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
         {
-            if (DialogueManager.Instance != null && !DialogueManager.Instance.IsDialogueActive())
+            if (!isDialogueActive)
             {
-                DialogueManager.Instance.ShowDialogue(dialogueMessage);
+                // Panggil method Interact() secara polymorphic
+                interactableComponent?.Interact();
 
-                // Sembunyikan logo tombol E saat dialog muncul
                 if (interactPrompt != null)
                 {
                     interactPrompt.SetActive(false);
@@ -33,8 +41,8 @@ public class Interactable : MonoBehaviour
             }
         }
 
-        // Kalau dialog ditutup tapi pemain masih di area interaksi, munculkan logo tombol E lagi
-        if (isPlayerNearby && DialogueManager.Instance != null && !DialogueManager.Instance.IsDialogueActive())
+        // tampilin logo tombol F lagi jika dialog udah ditutup dan pemain masih di area interaksi
+        if (isPlayerNearby && !isDialogueActive)
         {
             if (interactPrompt != null && !interactPrompt.activeSelf)
             {
@@ -48,10 +56,9 @@ public class Interactable : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerNearby = true;
-            Debug.Log("Kamu memasuki area interaksi! Tekan E untuk bicara.");
+            Debug.Log("Kamu memasuki area interaksi! Tekan F untuk bicara.");
 
-            // Munculkan logo tombol E saat pemain masuk area interaksi
-            if (interactPrompt != null)
+            if (interactPrompt != null && (DialogueManager.Instance == null || !DialogueManager.Instance.IsDialogueActive))
             {
                 interactPrompt.SetActive(true);
             }
@@ -64,13 +71,11 @@ public class Interactable : MonoBehaviour
         {
             isPlayerNearby = false;
 
-            // Sembunyikan logo tombol E saat pemain keluar area interaksi
             if (interactPrompt != null)
             {
                 interactPrompt.SetActive(false);
             }
-            
-            // Otomatis menutup dialog jika pemain berjalan keluar area
+
             if (DialogueManager.Instance != null)
             {
                 DialogueManager.Instance.HideDialogue();

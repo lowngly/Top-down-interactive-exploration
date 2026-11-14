@@ -25,7 +25,7 @@ public class PlayerAnimator : MonoBehaviour
         animator.SetFloat(MoveX, movement.Facing.x);
         animator.SetFloat(MoveY, movement.Facing.y);
 
-        // Balik sprite (flip) jika karakter menghadap ke kiri
+        // Balik sprite (flip) kalo karakter menghadap ke kiri
         if (movement.Facing.x != 0)
         {
             spriteRenderer.flipX = movement.Facing.x < 0;
