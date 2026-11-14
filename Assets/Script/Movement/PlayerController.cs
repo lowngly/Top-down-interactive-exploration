@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
-    // Properti yang wajib ada agar bisa dibaca oleh PlayerAnimator
+    // Properti yang wajib ada biar bisa dibaca oleh PlayerAnimator
     public Vector2 Velocity => rb != null ? rb.linearVelocity : Vector2.zero;
     public Vector2 Facing { get; private set; } = Vector2.down;
 
