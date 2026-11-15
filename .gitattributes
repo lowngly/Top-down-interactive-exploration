@@ -1,9 +1,10 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
-# Kecualikan shader bawaan Unity & TextMesh Pro dari statistik bahasa GitHub
-Assets/TextMesh Pro/** linguist-vendored
-*.shader linguist-vendored
-*.cginc linguist-vendored
-*.hlsl linguist-vendored
-*.shadergraph linguist-vendored
+# Kecualikan semua shader & TextMesh Pro dari statistik bahasa GitHub
+Assets/TextMesh?Pro/** linguist-vendored linguist-detectable=false
+*.shader linguist-vendored linguist-detectable=false
+*.cginc linguist-vendored linguist-detectable=false
+*.hlsl linguist-vendored linguist-detectable=false
+*.shadergraph linguist-vendored linguist-detectable=false
+*.compute linguist-vendored linguist-detectable=false
